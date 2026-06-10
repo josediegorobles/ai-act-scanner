@@ -2,6 +2,44 @@
 
 A preliminary self-assessment tool for Spanish SMEs to understand AI usage risks under the EU AI Act.
 
+**Live demo: <https://josediegorobles.github.io/ai-act-scanner/>**
+
+![AI Act Scanner screenshot](assets/screenshot.png)
+
+## How It Works
+
+AI Act Scanner is a static single-page web app — vanilla HTML, CSS and JavaScript, with no backend, no build step and no frameworks. It is 100% local-first: every answer is processed in the browser and no data ever leaves it.
+
+1. **Wizard questionnaire** — 8 steps covering sector, company size, AI tools in use, personal/sensitive data, use of AI in HR, healthcare, finance, education, credit scoring or automated decision-making, internal guidelines, and human review of AI outputs.
+2. **Scoring engine** — [`js/scoring.js`](js/scoring.js) is a small pure-function rule interpreter. All rules are explicit data in [`data/rules.json`](data/rules.json), grouped into four areas loosely mapped to the EU AI Act: personal & sensitive data, Annex III high-risk uses, internal governance, and human oversight. Each area and the overall result resolve to **low / medium / high / unknown**.
+3. **Report** — on-screen summary plus a downloadable PDF (generated locally with jsPDF from a CDN): overall risk level, risk per area, main risks identified, recommended next steps, and a call to action for an expert human review.
+4. **Bilingual** — Spanish (default) and English, switchable at any time; all strings live in [`js/i18n.js`](js/i18n.js).
+
+### Regulatory framing
+
+The EU AI Act is already in force and applies in stages. The obligations for Annex III high-risk systems have been postponed to **December 2027 / August 2028** under the May 2026 provisional agreement (the "Digital Omnibus" package). The tool deliberately frames this as *acting now is a competitive advantage* — never as artificial deadlines.
+
+### Running locally
+
+Serve the folder with any static server (the rules JSON is loaded with `fetch`, so `file://` won't work):
+
+```bash
+python3 -m http.server 8000
+# open http://localhost:8000
+```
+
+### Tests
+
+The scoring engine is the one piece that must not fail, so it is unit-tested in plain Node (no dependencies):
+
+```bash
+node test/scoring.test.js
+```
+
+### Deployment
+
+Deployed with GitHub Pages from the `main` branch (root folder). Everything is static, so any static host works.
+
 ## Who It Is For
 
 AI Act Scanner is designed for small and medium-sized companies in Spain that are already using, testing, or planning to adopt AI tools in day-to-day operations.
@@ -81,11 +119,11 @@ Companies using AI in sensitive, regulated, or high-impact areas should seek exp
 
 ## Roadmap
 
-- web form
-- PDF report
-- Spanish and English support
-- sector-specific templates
-- internal AI policy generator
+- [x] web form
+- [x] PDF report
+- [x] Spanish and English support
+- [ ] sector-specific templates
+- [ ] internal AI policy generator
 
 ## Author
 
@@ -95,4 +133,4 @@ Rust + AI + Web3 + technical leadership
 
 ## Commercial Note
 
-For a human review of your AI usage risks and internal AI policy, contact Jose Robles.
+For a human review of your AI usage risks and internal AI policy, contact Jose Robles: <https://calendly.com/jd-robles>.

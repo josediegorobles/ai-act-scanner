@@ -1,0 +1,166 @@
+{
+  "version": "1.0.0",
+  "description": "Explicit scoring rules for AI Act Scanner. Levels: low < unknown < medium < high (precedence for combining). Areas loosely map to: data protection exposure, EU AI Act Annex III high-risk categories, internal governance, and human oversight.",
+  "levelPrecedence": ["low", "unknown", "medium", "high"],
+  "requiredFields": [
+    "sector",
+    "size",
+    "tools",
+    "personalData",
+    "sensitiveData",
+    "highRiskAreas",
+    "guidelines",
+    "humanReview"
+  ],
+  "areas": [
+    {
+      "id": "data_protection",
+      "default": "low",
+      "rules": [
+        {
+          "id": "dp_sensitive_yes",
+          "if": { "field": "sensitiveData", "equals": "yes" },
+          "level": "high",
+          "recommends": ["dpia", "expert_review", "vendor_check"]
+        },
+        {
+          "id": "dp_personal_yes",
+          "if": { "field": "personalData", "equals": "yes" },
+          "level": "medium",
+          "recommends": ["dpia", "vendor_check"]
+        },
+        {
+          "id": "dp_personal_unknown",
+          "if": { "field": "personalData", "equals": "unknown" },
+          "level": "unknown",
+          "recommends": ["inventory"]
+        },
+        {
+          "id": "dp_sensitive_unknown",
+          "if": { "field": "sensitiveData", "equals": "unknown" },
+          "level": "unknown",
+          "recommends": ["inventory"]
+        }
+      ]
+    },
+    {
+      "id": "annex_iii",
+      "default": "low",
+      "rules": [
+        {
+          "id": "ax_hr",
+          "if": { "field": "highRiskAreas", "includes": "hr" },
+          "level": "high",
+          "recommends": ["expert_review", "human_review_process", "monitor_timeline"]
+        },
+        {
+          "id": "ax_healthcare",
+          "if": { "field": "highRiskAreas", "includes": "healthcare" },
+          "level": "high",
+          "recommends": ["expert_review", "human_review_process", "monitor_timeline"]
+        },
+        {
+          "id": "ax_finance",
+          "if": { "field": "highRiskAreas", "includes": "finance" },
+          "level": "high",
+          "recommends": ["expert_review", "human_review_process", "monitor_timeline"]
+        },
+        {
+          "id": "ax_education",
+          "if": { "field": "highRiskAreas", "includes": "education" },
+          "level": "high",
+          "recommends": ["expert_review", "human_review_process", "monitor_timeline"]
+        },
+        {
+          "id": "ax_credit_scoring",
+          "if": { "field": "highRiskAreas", "includes": "credit_scoring" },
+          "level": "high",
+          "recommends": ["expert_review", "human_review_process", "monitor_timeline"]
+        },
+        {
+          "id": "ax_law_enforcement",
+          "if": { "field": "highRiskAreas", "includes": "law_enforcement" },
+          "level": "high",
+          "recommends": ["expert_review", "human_review_process", "monitor_timeline"]
+        },
+        {
+          "id": "ax_automated_decisions",
+          "if": { "field": "highRiskAreas", "includes": "automated_decisions" },
+          "level": "high",
+          "recommends": ["expert_review", "human_review_process", "monitor_timeline"]
+        },
+        {
+          "id": "ax_regulated_sector",
+          "if": {
+            "allOf": [
+              { "field": "sector", "in": ["healthcare", "finance", "education", "legal"] },
+              {
+                "field": "tools",
+                "includesAny": [
+                  "chatgpt",
+                  "copilot",
+                  "gemini",
+                  "internal",
+                  "hr_software",
+                  "docs",
+                  "support",
+                  "other"
+                ]
+              }
+            ]
+          },
+          "level": "medium",
+          "recommends": ["inventory", "monitor_timeline"]
+        }
+      ]
+    },
+    {
+      "id": "governance",
+      "default": "low",
+      "rules": [
+        {
+          "id": "gov_no_guidelines",
+          "if": { "field": "guidelines", "equals": "no" },
+          "level": "medium",
+          "recommends": ["policy", "training"]
+        },
+        {
+          "id": "gov_partial_guidelines",
+          "if": { "field": "guidelines", "equals": "partial" },
+          "level": "low",
+          "recommends": ["policy", "training"]
+        }
+      ]
+    },
+    {
+      "id": "human_oversight",
+      "default": "low",
+      "rules": [
+        {
+          "id": "ho_never",
+          "if": { "field": "humanReview", "equals": "never" },
+          "level": "high",
+          "recommends": ["human_review_process", "expert_review"]
+        },
+        {
+          "id": "ho_sometimes",
+          "if": { "field": "humanReview", "equals": "sometimes" },
+          "level": "medium",
+          "recommends": ["human_review_process"]
+        },
+        {
+          "id": "ho_unknown",
+          "if": { "field": "humanReview", "equals": "unknown" },
+          "level": "unknown",
+          "recommends": ["inventory", "human_review_process"]
+        }
+      ]
+    }
+  ],
+  "baseRecommendations": {
+    "low": ["inventory", "policy"],
+    "unknown": ["inventory", "policy"],
+    "medium": ["inventory", "policy", "training"],
+    "high": ["inventory", "policy", "training", "expert_review"]
+  }
+}
