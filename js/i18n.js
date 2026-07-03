@@ -3,7 +3,7 @@ var I18N = {
   es: {
     ui: {
       appName: "AI Act Scanner",
-      tagline: "Autoevaluación preliminar de riesgos de IA para pymes",
+      tagline: "Checklist interno imprimible de riesgos de IA para equipos",
       start: "Empezar la evaluación",
       back: "Atrás",
       next: "Siguiente",
@@ -15,7 +15,7 @@ var I18N = {
       requiredMsg: "Selecciona una opción para continuar.",
       introTitle: "¿Dónde está tu empresa frente al Reglamento Europeo de IA?",
       introLead:
-        "Responde 8 preguntas sobre cómo usa tu empresa la inteligencia artificial y obtén un informe preliminar de riesgo con próximos pasos prácticos. Pensado para pymes que ya usan ChatGPT, Copilot, automatizaciones internas u otras herramientas de IA.",
+        "Responde 8 preguntas sobre cómo usa tu equipo la inteligencia artificial y obtén un checklist interno imprimible con próximos pasos prácticos. Pensado para pymes que ya usan ChatGPT, Copilot, automatizaciones internas u otras herramientas de IA.",
       privacyTitle: "100% local: tus datos no salen del navegador",
       privacyBody:
         "Esta herramienta funciona íntegramente en tu navegador. No hay servidor, no se envía nada a internet y no se guarda ninguna respuesta. No introduzcas datos confidenciales ni personales: solo se evalúan categorías de uso.",
@@ -33,11 +33,10 @@ var I18N = {
       stepsTitle: "Próximos pasos recomendados",
       timelineTitle: "Contexto normativo: por qué actuar ahora",
       timelineBody:
-        "El Reglamento Europeo de IA (AI Act) ya está en vigor. Su aplicación es escalonada: las prohibiciones de prácticas inaceptables y las obligaciones de alfabetización en IA ya aplican, y las obligaciones para los sistemas de alto riesgo del Anexo III se han retrasado a diciembre de 2027 / agosto de 2028 según el acuerdo provisional de mayo de 2026 (paquete «Digital Omnibus»). Ese margen no es una razón para esperar: las empresas que ordenan hoy su uso de IA ganan contratos, generan confianza ante clientes e inversores y evitan rediseños costosos de última hora. Actuar ahora es una ventaja competitiva.",
-      ctaTitle: "¿Quieres una revisión humana?",
-      ctaBody:
-        "Para una revisión humana de tus riesgos y tu política interna de IA — Jose Robles.",
-      ctaButton: "Reservar una llamada",
+        "El Reglamento Europeo de IA (AI Act) ya está en vigor y aplica por fases. Según el acuerdo provisional de Digital Omnibus de {0}, las nuevas fechas de aplicación para sistemas de alto riesgo serían {1} para sistemas autónomos cubiertos por el Anexo III y {2} para sistemas embebidos en productos bajo legislación armonizada de la UE. Última revisión de esta nota: {3}.",
+      checklistTitle: "Checklist interno imprimible",
+      checklistBody:
+        "Usa el informe descargable como material de trabajo para una conversación interna entre negocio, tecnología, operaciones, RRHH y cumplimiento. No es un canal comercial ni sustituye una revisión experta cuando haya usos sensibles o de alto impacto.",
       footerNote:
         "AI Act Scanner no es asesoría legal ni una certificación de cumplimiento. Procesamiento 100% local: ningún dato sale de tu navegador.",
       pdfGenerated: "Informe generado el",
@@ -193,7 +192,7 @@ var I18N = {
       human_review_process:
         "Define un proceso explícito de revisión humana para los resultados de IA con impacto en personas o decisiones de negocio.",
       monitor_timeline:
-        "Sigue el calendario del AI Act para usos de alto riesgo (Anexo III, plazos diciembre 2027 / agosto 2028) y prepárate con antelación.",
+        "Sigue el calendario del AI Act para usos de alto riesgo y prepárate con antelación.",
       expert_review:
         "Solicita una revisión experta (legal y técnica) de los usos señalados como de alto riesgo antes de ampliarlos."
     }
@@ -201,7 +200,7 @@ var I18N = {
   en: {
     ui: {
       appName: "AI Act Scanner",
-      tagline: "Preliminary AI risk self-assessment for SMEs",
+      tagline: "Printable internal AI risk checklist for teams",
       start: "Start the assessment",
       back: "Back",
       next: "Next",
@@ -213,7 +212,7 @@ var I18N = {
       requiredMsg: "Select an option to continue.",
       introTitle: "Where does your company stand under the EU AI Act?",
       introLead:
-        "Answer 8 questions about how your company uses artificial intelligence and get a preliminary risk report with practical next steps. Built for SMEs already using ChatGPT, Copilot, internal automations or other AI tools.",
+        "Answer 8 questions about how your team uses artificial intelligence and get a printable internal checklist with practical next steps. Built for SMEs already using ChatGPT, Copilot, internal automations or other AI tools.",
       privacyTitle: "100% local: your data never leaves the browser",
       privacyBody:
         "This tool runs entirely in your browser. There is no server, nothing is sent over the internet, and no answer is stored. Do not enter confidential or personal data: only categories of use are assessed.",
@@ -231,11 +230,10 @@ var I18N = {
       stepsTitle: "Recommended next steps",
       timelineTitle: "Regulatory context: why act now",
       timelineBody:
-        "The EU AI Act is already in force. It applies in stages: the bans on unacceptable practices and AI literacy obligations already apply, and the obligations for Annex III high-risk systems have been postponed to December 2027 / August 2028 under the May 2026 provisional agreement (the \"Digital Omnibus\" package). That extra time is not a reason to wait: companies that get their AI usage in order today win contracts, build trust with clients and investors, and avoid costly last-minute redesigns. Acting now is a competitive advantage.",
-      ctaTitle: "Want a human review?",
-      ctaBody:
-        "For a human review of your AI risks and your internal AI policy — Jose Robles.",
-      ctaButton: "Book a call",
+        "The EU AI Act is already in force and applies in stages. Under the {0} provisional Digital Omnibus agreement, the new application dates for high-risk systems would be {1} for stand-alone systems covered by Annex III and {2} for systems embedded in products under EU harmonisation legislation. Last reviewed: {3}.",
+      checklistTitle: "Printable internal checklist",
+      checklistBody:
+        "Use the downloadable report as working material for an internal conversation between business, technology, operations, HR and compliance. It is not a commercial channel and it does not replace expert review where sensitive or high-impact uses are involved.",
       footerNote:
         "AI Act Scanner is not legal advice or a compliance certification. 100% local processing: no data leaves your browser.",
       pdfGenerated: "Report generated on",
@@ -391,7 +389,7 @@ var I18N = {
       human_review_process:
         "Define an explicit human review process for AI outputs that affect people or business decisions.",
       monitor_timeline:
-        "Track the AI Act timeline for high-risk uses (Annex III, December 2027 / August 2028 deadlines) and prepare ahead of time.",
+        "Track the AI Act timeline for high-risk uses and prepare ahead of time.",
       expert_review:
         "Get an expert (legal and technical) review of the uses flagged as high-risk before expanding them."
     }

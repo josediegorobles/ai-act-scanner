@@ -6,8 +6,12 @@ const fs = require("fs");
 const path = require("path");
 
 const Scoring = require("../js/scoring.js");
+const { render: renderRegulatoryReadmeBlock } = require("../scripts/render-regulatory-readme.js");
 const rules = JSON.parse(
   fs.readFileSync(path.join(__dirname, "..", "data", "rules.json"), "utf8")
+);
+const regulatoryStatus = JSON.parse(
+  fs.readFileSync(path.join(__dirname, "..", "data", "regulatory-status.json"), "utf8")
 );
 
 function answers(overrides) {
@@ -219,6 +223,30 @@ test("all rule levels exist in levelPrecedence", () => {
       );
     }
   }
+});
+
+test("regulatory status was reviewed within the last six months", () => {
+  const reviewed = new Date(regulatoryStatus.last_reviewed + "T00:00:00Z");
+  assert.ok(!Number.isNaN(reviewed.getTime()), "last_reviewed must be a valid YYYY-MM-DD date");
+
+  const cutoff = new Date();
+  cutoff.setUTCHours(0, 0, 0, 0);
+  cutoff.setUTCMonth(cutoff.getUTCMonth() - regulatoryStatus.review_policy_months);
+
+  assert.ok(
+    reviewed >= cutoff,
+    "regulatory-status.json last_reviewed is older than " +
+      regulatoryStatus.review_policy_months +
+      " months"
+  );
+});
+
+test("README regulatory block is rendered from regulatory-status.json", () => {
+  const readme = fs.readFileSync(path.join(__dirname, "..", "README.md"), "utf8");
+  assert.ok(
+    readme.includes(renderRegulatoryReadmeBlock(regulatoryStatus)),
+    "run: node scripts/render-regulatory-readme.js --write"
+  );
 });
 
 console.log("\n" + passed + " passed, " + failed + " failed");

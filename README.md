@@ -1,6 +1,6 @@
 # AI Act Scanner
 
-A preliminary self-assessment tool for Spanish SMEs to understand AI usage risks under the EU AI Act.
+A printable internal self-assessment tool for Spanish SME teams to structure a first AI usage risk conversation under the EU AI Act.
 
 **Live demo: <https://josediegorobles.github.io/ai-act-scanner/>**
 
@@ -12,12 +12,30 @@ AI Act Scanner is a static single-page web app — vanilla HTML, CSS and JavaScr
 
 1. **Wizard questionnaire** — 8 steps covering sector, company size, AI tools in use, personal/sensitive data, use of AI in HR, healthcare, finance, education, credit scoring or automated decision-making, internal guidelines, and human review of AI outputs.
 2. **Scoring engine** — [`js/scoring.js`](js/scoring.js) is a small pure-function rule interpreter. All rules are explicit data in [`data/rules.json`](data/rules.json), grouped into four areas loosely mapped to the EU AI Act: personal & sensitive data, Annex III high-risk uses, internal governance, and human oversight. Each area and the overall result resolve to **low / medium / high / unknown**.
-3. **Report** — on-screen summary plus a downloadable PDF (generated locally with jsPDF from a CDN): overall risk level, risk per area, main risks identified, recommended next steps, and a call to action for an expert human review.
+3. **Checklist report** — on-screen summary plus a downloadable PDF (generated locally with jsPDF from a CDN): overall risk level, risk per area, main risks identified, and practical next steps for an internal team review.
 4. **Bilingual** — Spanish (default) and English, switchable at any time; all strings live in [`js/i18n.js`](js/i18n.js).
 
 ### Regulatory framing
 
-The EU AI Act is already in force and applies in stages. The obligations for Annex III high-risk systems have been postponed to **December 2027 / August 2028** under the May 2026 provisional agreement (the "Digital Omnibus" package). The tool deliberately frames this as *acting now is a competitive advantage* — never as artificial deadlines.
+Regulatory calendar assertions live in [`data/regulatory-status.json`](data/regulatory-status.json), not in prose-only copy. The UI renders the report context from that file, and this README block can be regenerated with:
+
+```bash
+node scripts/render-regulatory-readme.js --write
+```
+
+<!-- regulatory-status:start -->
+### Regulatory status
+
+Source of truth: [`data/regulatory-status.json`](data/regulatory-status.json).
+
+Last reviewed: **2026-07-02**.
+
+- Digital Omnibus status: `provisional_agreement` (7 May 2026).
+- Annex III stand-alone high-risk AI systems: **2 December 2027**.
+- High-risk AI systems embedded in products under EU harmonisation legislation: **2 August 2028**.
+
+CI fails when `last_reviewed` is older than 6 months, so this block is a reminder to re-check the official sources before relying on the calendar.
+<!-- regulatory-status:end -->
 
 ### Running locally
 
@@ -36,17 +54,31 @@ The scoring engine is the one piece that must not fail, so it is unit-tested in 
 node test/scoring.test.js
 ```
 
+The same test command also checks that regulatory status data was reviewed within the last six months and that the README regulatory block still matches [`data/regulatory-status.json`](data/regulatory-status.json).
+
+### jsPDF SRI
+
+The PDF export loads jsPDF from cdnjs with Subresource Integrity (SRI). If you change the jsPDF version or CDN URL in [`index.html`](index.html), regenerate the `sha384` value against the exact CDN file:
+
+```bash
+curl -fsSL https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js \
+  | openssl dgst -sha384 -binary \
+  | openssl base64 -A
+```
+
+Then update the `integrity="sha384-..."` attribute and keep `crossorigin="anonymous"` on the script tag.
+
 ### Deployment
 
 Deployed with GitHub Pages from the `main` branch (root folder). Everything is static, so any static host works.
 
 ## Who It Is For
 
-AI Act Scanner is designed for small and medium-sized companies in Spain that are already using, testing, or planning to adopt AI tools in day-to-day operations.
+AI Act Scanner is designed for small and medium-sized companies in Spain that are already using, testing, or planning to adopt AI tools in day-to-day operations and want a printable internal checklist.
 
 Typical users include SMEs using tools such as ChatGPT, Microsoft Copilot, Gemini, internal AI automations, AI assistants, HR software, document processing workflows, customer support automation, or other AI-enabled business systems.
 
-The project is especially relevant for founders, operations teams, engineering leaders, HR managers, customer support managers, and business owners who need a practical first view of where AI-related risk may exist before engaging in a deeper legal, compliance, or technical review.
+The project is especially relevant for founders, operations teams, engineering leaders, HR managers, customer support managers, and business owners who need a practical first view of where AI-related risk may exist before an internal discussion or a deeper legal, compliance, or technical review.
 
 ## What Problem It Solves
 
@@ -58,7 +90,7 @@ Many SMEs are adopting AI faster than they are documenting policies, reviewing r
 - whether AI outputs are reviewed by humans
 - whether specific use cases may require expert legal or compliance review
 
-AI Act Scanner helps companies structure this first conversation. It does not certify compliance and does not provide legal advice. Its purpose is to make AI usage more visible, easier to discuss, and easier to prioritize.
+AI Act Scanner helps companies structure this first internal conversation. It does not certify compliance and does not provide legal advice. Its purpose is to make AI usage more visible, easier to discuss, easier to print, and easier to prioritize.
 
 ## What The MVP Will Do
 
@@ -70,7 +102,7 @@ It will help users:
 - identify whether AI is used in higher-risk contexts
 - flag potential exposure related to personal data, sensitive data, automated decisions, or regulated sectors
 - receive a basic low, medium, high, or unknown risk indication
-- receive practical next steps for internal review
+- receive practical next steps for an internal checklist review
 - understand when to seek expert review
 
 ## Example Questionnaire
@@ -93,7 +125,7 @@ An example preliminary report may include:
 - risk level: low, medium, high, or unknown
 - main risks identified
 - recommended next steps
-- a clear "seek expert review" call to action
+- a clear note on when expert review may be needed
 
 The output should be understandable by non-lawyers and useful enough to support an internal conversation between business, technical, and compliance stakeholders.
 
@@ -117,6 +149,12 @@ It is not legal advice. It is not a compliance certification tool. It is not a s
 
 Companies using AI in sensitive, regulated, or high-impact areas should seek expert review before relying on internal AI processes or deploying AI-enabled workflows.
 
+## Relationship With AI Act Diagnosis Bot
+
+This repository is intentionally positioned as an internal, printable checklist tool for teams that want to discuss AI usage risks without submitting data anywhere.
+
+For a more guided lead-magnet experience, use AI Act Diagnosis Bot instead: <https://github.com/josediegorobles/ai-act-diagnosis-bot>.
+
 ## Roadmap
 
 - [x] web form
@@ -131,6 +169,3 @@ Jose Robles — Head of Engineering / AI Architect
 
 Rust + AI + Web3 + technical leadership
 
-## Commercial Note
-
-For a human review of your AI usage risks and internal AI policy, contact Jose Robles: <https://calendly.com/jd-robles>.

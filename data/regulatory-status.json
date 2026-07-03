@@ -1,0 +1,24 @@
+{
+  "last_reviewed": "2026-07-02",
+  "review_policy_months": 6,
+  "framework": "EU AI Act",
+  "digital_omnibus": {
+    "package_name": "Digital Omnibus / Omnibus VII",
+    "status": "provisional_agreement",
+    "agreement_date": "2026-05-07"
+  },
+  "high_risk_application": {
+    "annex_iii_standalone": {
+      "date": "2027-12-02",
+      "scope": "Annex III stand-alone high-risk AI systems"
+    },
+    "annex_i_embedded_products": {
+      "date": "2028-08-02",
+      "scope": "High-risk AI systems embedded in products under EU harmonisation legislation"
+    }
+  },
+  "sources": [
+    "https://digital-strategy.ec.europa.eu/en/policies/ai-act-standardisation",
+    "https://www.consilium.europa.eu/en/press/press-releases/2026/05/07/artificial-intelligence-council-and-parliament-agree-to-simplify-and-streamline-rules/"
+  ]
+}

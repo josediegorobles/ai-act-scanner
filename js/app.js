@@ -19,6 +19,7 @@
     step: 0,
     answers: {},
     rules: null,
+    regulatoryStatus: null,
     result: null
   };
 
@@ -38,6 +39,34 @@
     return str.replace(/\{(\d+)\}/g, function (_, n) { return args[n]; });
   }
 
+  function formatDate(value) {
+    return new Intl.DateTimeFormat(state.lang === "es" ? "es-ES" : "en-GB", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+      timeZone: "UTC"
+    }).format(new Date(value + "T00:00:00Z"));
+  }
+
+  function regulatoryText() {
+    var status = state.regulatoryStatus;
+    if (!status) return "";
+    var annexIII = status.high_risk_application.annex_iii_standalone.date;
+    var embedded = status.high_risk_application.annex_i_embedded_products.date;
+    return format(
+      t("ui.timelineBody"),
+      formatDate(status.digital_omnibus.agreement_date),
+      formatDate(annexIII),
+      formatDate(embedded),
+      status.last_reviewed
+    );
+  }
+
+  function renderRegulatoryStatus() {
+    var el = $("#regulatory-status");
+    if (el) el.textContent = regulatoryText();
+  }
+
   /* ---------- i18n ---------- */
   function applyStaticTranslations() {
     document.documentElement.lang = state.lang;
@@ -48,6 +77,7 @@
     $("#lang-en").classList.toggle("active", state.lang === "en");
     $("#lang-es").setAttribute("aria-pressed", state.lang === "es");
     $("#lang-en").setAttribute("aria-pressed", state.lang === "en");
+    renderRegulatoryStatus();
   }
 
   function setLang(lang) {
@@ -222,6 +252,8 @@
       li.textContent = t("steps." + s);
       steps.appendChild(li);
     });
+
+    renderRegulatoryStatus();
   }
 
   /* ---------- PDF ---------- */
@@ -285,12 +317,12 @@
 
     text(t("ui.timelineTitle"), 12, "bold", "#16324f");
     gap(1);
-    text(t("ui.timelineBody"), 9, "normal", "#475569");
+    text(regulatoryText(), 9, "normal", "#475569");
     gap(4);
 
-    text(t("ui.ctaTitle"), 12, "bold", "#16324f");
+    text(t("ui.checklistTitle"), 12, "bold", "#16324f");
     gap(1);
-    text(t("ui.ctaBody") + " — https://calendly.com/jd-robles", 10, "normal", "#1d6fb8");
+    text(t("ui.checklistBody"), 10, "normal", "#1d6fb8");
     gap(4);
 
     text(t("ui.disclaimerTitle"), 11, "bold", "#b26a00");
@@ -315,6 +347,14 @@
       .then(function (res) { return res.json(); })
       .then(function (rules) { state.rules = rules; })
       .catch(function (err) { console.error("Could not load scoring rules:", err); });
+
+    fetch("data/regulatory-status.json")
+      .then(function (res) { return res.json(); })
+      .then(function (status) {
+        state.regulatoryStatus = status;
+        renderRegulatoryStatus();
+      })
+      .catch(function (err) { console.error("Could not load regulatory status:", err); });
 
     $("#lang-es").addEventListener("click", function () { setLang("es"); });
     $("#lang-en").addEventListener("click", function () { setLang("en"); });
