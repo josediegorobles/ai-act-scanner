@@ -81,6 +81,17 @@ body {
 
 .lang-btn.active { background: #fff; color: var(--navy); }
 
+.superseded-banner {
+  background: #fff7ed;
+  border-bottom: 1px solid #fed7aa;
+  color: #7c2d12;
+  padding: 0.8rem 0;
+  font-size: 0.92rem;
+}
+
+.superseded-banner strong { color: #7c2d12; }
+.superseded-banner a { color: #9a3412; font-weight: 700; }
+
 /* Screens */
 .screen { padding: 2rem 0 3rem; }
 

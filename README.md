@@ -1,3 +1,10 @@
+> [!IMPORTANT]
+> **Superseded by [ai-act-diagnosis-bot](https://github.com/josediegorobles/ai-act-diagnosis-bot)** — 2026-07-03.
+>
+> The canonical bot now provides an adaptive questionnaire that follows the user's answers.
+> It generates a downloadable PDF report for the diagnosis.
+> It supports both Spanish and English flows.
+
 # AI Act Scanner
 
 A preliminary self-assessment tool for Spanish SMEs to understand AI usage risks under the EU AI Act.
