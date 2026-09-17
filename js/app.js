@@ -8,7 +8,7 @@
  *   always stay in the browser. Leave it empty to deploy with the form
  *   visibly disabled (plus a discreet note) until an endpoint exists.
  *   The form is shown only AFTER the full report, never as a gate. */
-var EMAIL_ENDPOINT = "";
+var EMAIL_ENDPOINT = "https://leadgate.jd-robpar.workers.dev/subscribe";
 
 (function () {
   "use strict";
@@ -279,7 +279,10 @@ var EMAIL_ENDPOINT = "";
     fetch(EMAIL_ENDPOINT, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: address })
+      // Solo el email. El endpoint ignora cualquier otro campo por contrato:
+      // la promesa de que las respuestas no salen del navegador se cumple en
+      // los dos extremos, no solo en el copy.
+      body: JSON.stringify({ email: address, source: "ai-act-scanner" })
     }).then(function (res) {
       if (!res.ok) throw new Error("bad status " + res.status);
       $("#email-form").reset();
