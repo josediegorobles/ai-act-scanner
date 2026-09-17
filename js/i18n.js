@@ -41,7 +41,22 @@ var I18N = {
       footerNote:
         "AI Act Scanner no es asesoría legal ni una certificación de cumplimiento. Procesamiento 100% local: ningún dato sale de tu navegador.",
       pdfGenerated: "Informe generado el",
-      pdfAnswersTitle: "Resumen de respuestas"
+      pdfAnswersTitle: "Resumen de respuestas",
+      emailTitle: "Recibir el informe por email",
+      emailBody:
+        "Te enviamos el informe en PDF y te avisamos si cambian los plazos del AI Act. Solo tu email sale del navegador: tus respuestas no se envían ni se almacenan.",
+      emailLabel: "Email de trabajo",
+      emailPlaceholder: "nombre@empresa.es",
+      emailConsentText: "Acepto la",
+      emailPrivacyLink: "política de privacidad",
+      emailSubmit: "Enviarme el informe",
+      emailSending: "Enviando…",
+      emailSuccess: "Recibido. Revisa tu bandeja de entrada.",
+      emailError: "No se pudo enviar. Inténtalo de nuevo más tarde.",
+      emailInvalid: "Introduce un email válido.",
+      emailConsentRequired: "Marca la casilla de consentimiento para continuar.",
+      emailDisabledNote:
+        "Captura de email pendiente de configuración en este despliegue."
     },
     levels: {
       low: "Bajo",
@@ -239,7 +254,22 @@ var I18N = {
       footerNote:
         "AI Act Scanner is not legal advice or a compliance certification. 100% local processing: no data leaves your browser.",
       pdfGenerated: "Report generated on",
-      pdfAnswersTitle: "Answers summary"
+      pdfAnswersTitle: "Answers summary",
+      emailTitle: "Get the report by email",
+      emailBody:
+        "We send you the report as a PDF and notify you if AI Act deadlines change. Only your email leaves the browser: your answers are never sent or stored.",
+      emailLabel: "Work email",
+      emailPlaceholder: "name@company.com",
+      emailConsentText: "I accept the",
+      emailPrivacyLink: "privacy policy",
+      emailSubmit: "Send me the report",
+      emailSending: "Sending…",
+      emailSuccess: "Received. Check your inbox.",
+      emailError: "Could not send. Please try again later.",
+      emailInvalid: "Enter a valid email address.",
+      emailConsentRequired: "Tick the consent checkbox to continue.",
+      emailDisabledNote:
+        "Email capture is not configured in this deployment yet."
     },
     levels: {
       low: "Low",
