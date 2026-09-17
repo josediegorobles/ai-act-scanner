@@ -1,5 +1,15 @@
 /* AI Act Scanner — wizard, i18n toggle, report rendering and PDF export.
- * All processing is local: no network calls besides loading static assets. */
+ * All processing is local: no network calls besides loading static assets.
+ *
+ * Email capture configuration:
+ *   EMAIL_ENDPOINT — URL of the endpoint that receives newsletter/report
+ *   subscriptions (e.g. a form backend or serverless function). It gets a
+ *   JSON POST body of { email } and NOTHING else: questionnaire answers
+ *   always stay in the browser. Leave it empty to deploy with the form
+ *   visibly disabled (plus a discreet note) until an endpoint exists.
+ *   The form is shown only AFTER the full report, never as a gate. */
+var EMAIL_ENDPOINT = "";
+
 (function () {
   "use strict";
 
@@ -44,6 +54,9 @@
     document.querySelectorAll("[data-i18n]").forEach(function (el) {
       el.textContent = t(el.getAttribute("data-i18n"));
     });
+    document.querySelectorAll("[data-i18n-ph]").forEach(function (el) {
+      el.setAttribute("placeholder", t(el.getAttribute("data-i18n-ph")));
+    });
     $("#lang-es").classList.toggle("active", state.lang === "es");
     $("#lang-en").classList.toggle("active", state.lang === "en");
     $("#lang-es").setAttribute("aria-pressed", state.lang === "es");
@@ -55,7 +68,7 @@
     localStorage.setItem("aas-lang", lang);
     applyStaticTranslations();
     if (!$("#screen-wizard").hidden) renderQuestion();
-    if (!$("#screen-report").hidden) renderReport();
+    if (!$("#screen-report").hidden) { renderReport(); updateEmailFormState(); }
   }
 
   /* ---------- screens ---------- */
@@ -224,6 +237,66 @@
     });
   }
 
+  /* ---------- email capture ----------
+   * Only the typed email address is ever sent, and only on explicit submit.
+   * Questionnaire answers never leave the browser. */
+  var emailStatusKey = null;
+
+  function isValidEmail(value) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+  }
+
+  function setEmailStatus(key, kind) {
+    emailStatusKey = key;
+    var el = $("#email-status");
+    if (!key) { el.hidden = true; el.textContent = ""; el.className = "email-status"; return; }
+    el.hidden = false;
+    el.textContent = t("ui." + key);
+    el.className = "email-status email-status-" + kind;
+  }
+
+  function updateEmailFormState() {
+    var enabled = EMAIL_ENDPOINT !== "";
+    $("#email-input").disabled = !enabled;
+    $("#email-consent").disabled = !enabled;
+    $("#email-submit").disabled = !enabled;
+    $("#email-disabled-note").hidden = enabled;
+    // Re-translate a visible status after a language switch.
+    if (emailStatusKey && !$("#email-status").hidden) {
+      var kind = $("#email-status").className.replace("email-status email-status-", "");
+      setEmailStatus(emailStatusKey, kind);
+    }
+  }
+
+  function submitEmail(e) {
+    e.preventDefault();
+    if (EMAIL_ENDPOINT === "") return;
+    var address = $("#email-input").value.trim();
+    if (!isValidEmail(address)) { setEmailStatus("emailInvalid", "error"); return; }
+    if (!$("#email-consent").checked) { setEmailStatus("emailConsentRequired", "error"); return; }
+    $("#email-submit").disabled = true;
+    setEmailStatus("emailSending", "pending");
+    fetch(EMAIL_ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: address })
+    }).then(function (res) {
+      if (!res.ok) throw new Error("bad status " + res.status);
+      $("#email-form").reset();
+      $("#email-submit").disabled = false;
+      setEmailStatus("emailSuccess", "success");
+    }).catch(function () {
+      $("#email-submit").disabled = false;
+      setEmailStatus("emailError", "error");
+    });
+  }
+
+  function resetEmailForm() {
+    $("#email-form").reset();
+    setEmailStatus(null);
+    updateEmailFormState();
+  }
+
   /* ---------- PDF ---------- */
   function downloadPdf() {
     var r = state.result;
@@ -305,6 +378,7 @@
     state.step = 0;
     state.answers = {};
     state.result = null;
+    resetEmailForm();
     showScreen("screen-intro");
   }
 
@@ -327,6 +401,8 @@
     $("#btn-back").addEventListener("click", prevStep);
     $("#btn-pdf").addEventListener("click", downloadPdf);
     $("#btn-restart").addEventListener("click", restart);
+    $("#email-form").addEventListener("submit", submitEmail);
+    updateEmailFormState();
   }
 
   document.addEventListener("DOMContentLoaded", init);

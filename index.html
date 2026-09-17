@@ -99,6 +99,27 @@
         <button type="button" id="btn-pdf" class="btn btn-primary" data-i18n="ui.downloadPdf"></button>
         <button type="button" id="btn-restart" class="btn btn-ghost" data-i18n="ui.restart"></button>
       </div>
+
+      <!-- Email capture: shown only AFTER the full report, never as a gate.
+           Sends the email address alone; questionnaire answers never leave the browser. -->
+      <div class="email-card">
+        <strong data-i18n="ui.emailTitle"></strong>
+        <p data-i18n="ui.emailBody"></p>
+        <p id="email-disabled-note" class="email-note" data-i18n="ui.emailDisabledNote" hidden></p>
+        <form id="email-form" novalidate>
+          <label class="email-field-label" for="email-input" data-i18n="ui.emailLabel"></label>
+          <div class="email-row">
+            <input type="email" id="email-input" name="email" autocomplete="email"
+              data-i18n-ph="ui.emailPlaceholder" placeholder="" required>
+            <button type="submit" id="email-submit" class="btn btn-primary" data-i18n="ui.emailSubmit"></button>
+          </div>
+          <label class="email-consent">
+            <input type="checkbox" id="email-consent">
+            <span><span data-i18n="ui.emailConsentText"></span> <a href="privacy.html" data-i18n="ui.emailPrivacyLink"></a></span>
+          </label>
+          <p id="email-status" class="email-status" role="status" aria-live="polite" hidden></p>
+        </form>
+      </div>
     </section>
   </main>
 
