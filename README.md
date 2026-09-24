@@ -141,3 +141,7 @@ Rust + AI + Web3 + technical leadership
 ## Commercial Note
 
 For a human review of your AI usage risks and internal AI policy, contact Jose Robles: <https://calendly.com/jd-robles>.
+
+---
+
+Servicio relacionado: https://josedrobles.com/es/ia-privada/
